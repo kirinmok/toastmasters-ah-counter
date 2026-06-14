@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ah Counter Live — BNI Tainan</title>
+<link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+
+<header>
+  <div>
+    <h1>🎤 Ah Counter</h1>
+    <div class="sub" id="meeting-info">Loading…</div>
+  </div>
+  <div style="text-align:right;font-size:10px;color:#555;line-height:1.3;">
+    <a href="https://kirinmok.github.io/toastmasters-timer/" style="display:inline-block;margin-bottom:6px;padding:5px 10px;background:#a78bfa;color:#1a1a1a;font-size:11px;font-weight:700;border-radius:4px;text-decoration:none;">⏱️ Timer →</a>
+    <div style="color:#777;">Developed by</div>
+    <div style="color:#999;font-weight:600;">Kirin Mok</div>
+    <a href="https://buymeacoffee.com/kirinmok" target="_blank" style="display:inline-block;margin-top:4px;padding:3px 8px;background:#ffdd00;color:#000;font-size:10px;font-weight:700;border-radius:4px;text-decoration:none;">☕ Buy me a coffee</a>
+  </div>
+</header>
+
+<div class="container">
+
+  <div class="tabs">
+    <div class="tab active" data-tab="script">📖 Script</div>
+    <div class="tab" data-tab="counter">🎙 Counter</div>
+    <div class="tab" data-tab="report">📣 Report</div>
+  </div>
+
+  <!-- ===== Tab 1: Opening Script ===== -->
+  <div class="tab-content active" id="tab-script">
+
+    <div class="section-card">
+      <h2>📷 拍照載入今晚講者</h2>
+      <div class="hint">拍 BNI 議程表 → 自動 OCR 抽出講者姓名+講題 → 確認後跳到 Counter tab</div>
+      <input type="file" id="agenda-photo" accept="image/*" capture="environment" style="display:none">
+      <button class="btn-primary" id="btn-pick-photo">📷 選擇 / 拍照議程</button>
+      <div id="ocr-result" style="margin-top:12px; display:none">
+        <div class="hint">辨識到 <span id="ocr-count">0</span> 位講者(可勾選/取消):</div>
+        <div id="ocr-speaker-list"></div>
+        <div class="btn-row" style="margin-top:10px">
+          <button class="btn-primary" id="btn-commit">✅ 確認載入</button>
+          <button class="btn-secondary" id="btn-show-raw">📄 看 OCR 原文</button>
+        </div>
+        <pre id="ocr-raw" class="script-box" style="display:none; margin-top:10px"></pre>
+      </div>
+    </div>
+
+    <div class="section-card">
+      <h2>Opening Script (7:01)</h2>
+      <div class="hint">Toastmaster 點到你時念這段。</div>
+      <pre id="opening-text" class="script-box"></pre>
+      <button class="btn-secondary" id="copy-opening">📋 複製開場詞</button>
+    </div>
+
+    <div class="section-card">
+      <h2>What to Listen For</h2>
+      <ul class="bullet">
+        <li>中文：嗯、啊、那個、就是、然後、其實、基本上</li>
+        <li>英文：uh, um, ah, like, you know, so, well, actually</li>
+        <li>排除：主持人、Timer、Grammarian、GE 自己的 report</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ===== Tab 2: Counter ===== -->
+  <div class="tab-content" id="tab-counter">
+    <div class="section-card">
+      <h2>Tonight's Speakers</h2>
+      <div class="hint">點 ● 開始錄音 → 講者結束點 ⏹ 停止 → 自動轉錄 + 統計</div>
+      <div id="speaker-list"></div>
+    </div>
+  </div>
+
+  <!-- ===== Tab 3: Report ===== -->
+  <div class="tab-content" id="tab-report">
+    <div class="section-card">
+      <h2>Ah Counter's Report (8:47)</h2>
+      <div class="hint">所有講者完成後自動生成。手動再生成請按下方按鈕。</div>
+      <pre id="report-text" class="script-box">(尚未生成)</pre>
+      <div class="btn-row">
+        <button class="btn-primary" id="generate-report">⚡ 生成 / 刷新報告</button>
+        <button class="btn-secondary" id="copy-report">📋 複製到剪貼簿</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="status-bar"></div>
+</div>
+
+<script src="/static/app.js"></script>
+</body>
+</html>

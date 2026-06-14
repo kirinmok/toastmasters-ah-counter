@@ -1,0 +1,38 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.venv/
+
+# OCR Swift binary (要時自動編譯)
+v2/ocr_bin
+
+# 錄音檔 + 上傳圖檔 (KIRIN 私人資料,不公開)
+v2/recordings/
+v2/uploads/
+v2/reports/
+recordings/
+reports/
+
+# Whisper 模型 cache (太大不放 git)
+*.bin
+*.pt
+*.onnx
+
+# macOS
+.DS_Store
+
+# 環境變數 (若以後加)
+.env
+.env.local
+
+# Log
+*.log
+/tmp/
+
+# 議程 JSON 含私人姓名 (要不要公開由 KIRIN 決定,先排除)
+agenda_2026-06-*.json
+v2/agenda_2026-06-*.json
+test_script.md
+gem_instructions.md
+SLEEP_NOTES.md

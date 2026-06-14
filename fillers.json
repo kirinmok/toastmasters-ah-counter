@@ -1,0 +1,36 @@
+{
+  "_comment": "Toastmasters Ah Counter 填充詞字典。中英混合，可隨時擴充。",
+  "chinese_fillers": {
+    "嗯": ["嗯", "嗯嗯"],
+    "啊": ["啊", "阿"],
+    "那個": ["那個", "那"],
+    "就是": ["就是", "就是說"],
+    "然後": ["然後", "然後呢"],
+    "所以": ["所以", "所以說"],
+    "對": ["對", "對對", "對啊"],
+    "這個": ["這個"],
+    "其實": ["其實"],
+    "基本上": ["基本上"],
+    "欸": ["欸", "誒"],
+    "嘛": ["嘛"],
+    "齁": ["齁", "厚"],
+    "喔": ["喔", "哦"]
+  },
+  "english_fillers": {
+    "uh": ["uh", "uhh", "uhhh"],
+    "um": ["um", "umm", "ummm"],
+    "ah": ["ah", "ahh"],
+    "like": ["like"],
+    "you know": ["you know", "y'know"],
+    "so": ["so"],
+    "well": ["well"],
+    "actually": ["actually"],
+    "basically": ["basically"],
+    "I mean": ["i mean"],
+    "right": ["right"],
+    "okay": ["okay", "ok"],
+    "kind of": ["kind of", "kinda"],
+    "sort of": ["sort of", "sorta"]
+  },
+  "_note": "like/so/well/right/okay 同時是正常用字，統計時要看語境。報告時建議以中文填充詞 + uh/um 為主，其他作參考。"
+}
