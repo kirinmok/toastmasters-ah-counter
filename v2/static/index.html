@@ -13,8 +13,8 @@
     <h1>🎤 Ah Counter</h1>
     <div class="sub" id="meeting-info">Loading…</div>
   </div>
+  <a href="https://kirinmok.github.io/toastmasters-timer/" style="position:absolute;left:60%;top:50%;transform:translateY(-50%);padding:8px 18px;background:#a78bfa;color:#1a1a1a;font-size:13px;font-weight:700;border-radius:6px;text-decoration:none;">⏱️ Timer →</a>
   <div style="text-align:right;font-size:10px;color:#555;line-height:1.3;">
-    <a href="https://kirinmok.github.io/toastmasters-timer/" style="display:inline-block;margin-bottom:6px;padding:5px 10px;background:#a78bfa;color:#1a1a1a;font-size:11px;font-weight:700;border-radius:4px;text-decoration:none;">⏱️ Timer →</a>
     <div style="color:#777;">Developed by</div>
     <div style="color:#999;font-weight:600;">Kirin Mok</div>
     <a href="https://buymeacoffee.com/kirinmok" target="_blank" style="display:inline-block;margin-top:4px;padding:3px 8px;background:#ffdd00;color:#000;font-size:10px;font-weight:700;border-radius:4px;text-decoration:none;">☕ Buy me a coffee</a>
@@ -33,10 +33,35 @@
   <div class="tab-content active" id="tab-script">
 
     <div class="section-card">
-      <h2>📷 拍照載入今晚講者</h2>
-      <div class="hint">拍 BNI 議程表 → 自動 OCR 抽出講者姓名+講題 → 確認後跳到 Counter tab</div>
+      <h2>🎯 載入今晚議程 (兩種方式)</h2>
+      <div class="hint">免 API key 流程,推薦使用</div>
+
+      <ol style="color:#bbb; font-size:13px; padding-left:22px; line-height:1.8; margin:8px 0 14px">
+        <li>📷 <b>拍下你的會議議程</b>(手機/相機任意)</li>
+        <li>🤖 打開 <b>Claude.ai / ChatGPT / Gemini</b> 任一網頁版 (免費)</li>
+        <li>📋 上傳照片 + 複製貼上 prompt (<code>v2/agenda_parse_prompt.md</code>)</li>
+        <li>📥 拿到 AI 回的 JSON,用下方<b>任一方式</b>載入</li>
+      </ol>
+
+      <h3 style="color:#06d6a0;margin-top:14px;font-size:14px;">方式 A: 直接貼上 JSON</h3>
+      <textarea id="agenda-paste" rows="6" placeholder='{
+  "meeting_no": 583,
+  "speakers": [
+    {"start": "19:34", "role": "Speaker 1", "speaker": "Luca", "counted": true}
+  ]
+}' style="width:100%;background:#0e0e0e;border:1px solid #2a2a2a;color:#ddd;padding:10px;border-radius:6px;font-family:'SF Mono',monospace;font-size:12px;margin-bottom:8px;"></textarea>
+      <button class="btn-primary" id="btn-paste-submit">✅ 提交貼上的 JSON</button>
+
+      <h3 style="color:#06d6a0;margin-top:18px;font-size:14px;">方式 B: 上傳檔案</h3>
+      <input type="file" id="agenda-json" accept=".json,.md,.txt" style="display:none">
+      <button class="btn-secondary" id="btn-pick-json">📂 上傳 JSON / MD / TXT</button>
+    </div>
+
+    <div class="section-card">
+      <h2>📷 (備用) 拍照 OCR 解析</h2>
+      <div class="hint">本機 macOS Vision OCR, 結構複雜時準度低, 建議用上方 JSON 流程</div>
       <input type="file" id="agenda-photo" accept="image/*" capture="environment" style="display:none">
-      <button class="btn-primary" id="btn-pick-photo">📷 選擇 / 拍照議程</button>
+      <button class="btn-secondary" id="btn-pick-photo">📷 選擇 / 拍照議程</button>
       <div id="ocr-result" style="margin-top:12px; display:none">
         <div class="hint">辨識到 <span id="ocr-count">0</span> 位講者(可勾選/取消):</div>
         <div id="ocr-speaker-list"></div>
@@ -52,7 +77,6 @@
       <h2>Opening Script (7:01)</h2>
       <div class="hint">Toastmaster 點到你時念這段。</div>
       <pre id="opening-text" class="script-box"></pre>
-      <button class="btn-secondary" id="copy-opening">📋 複製開場詞</button>
     </div>
 
     <div class="section-card">

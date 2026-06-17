@@ -147,10 +147,18 @@ AGENDA: dict = {}
 
 
 def load_meta_only(path: Path):
-    """只載入會議 metadata 跟開場詞範本,不預填講者 — 講者由 KIRIN 拍照載入。"""
+    """載入會議 metadata + 開場詞。若 JSON 已含 speakers 直接預填(免 OCR);沒有就空等 OCR。"""
     global SPEAKERS, AGENDA
     AGENDA = json.loads(path.read_text(encoding="utf-8"))
-    SPEAKERS = []  # 啟動時空,等 OCR commit
+    SPEAKERS = []
+    # 若 agenda 已含實際講者(KIRIN 手寫或從 OCR 預先解析過),直接吃進去
+    for i, sp in enumerate(AGENDA.get("speakers", [])):
+        SPEAKERS.append(SpeakerSession(
+            idx=i,
+            name=sp.get("speaker", f"Speaker {i+1}"),
+            role=sp.get("role", ""),
+            language=sp.get("language", "auto"),
+        ))
 
 
 # ===== FastAPI =====
@@ -262,6 +270,33 @@ async def api_upload_agenda(file: UploadFile = File(...)):
 
 class CommitSpeakers(BaseModel):
     speakers: list[dict]
+
+
+@app.post("/api/upload-agenda-json")
+async def api_upload_agenda_json(file: UploadFile = File(...)):
+    """直接吃 KIRIN 從外部 AI (Claude.ai / ChatGPT / Gemini) 拿回的 JSON 議程。"""
+    global SPEAKERS, AGENDA
+    try:
+        content = (await file.read()).decode("utf-8")
+        # 容錯: 若是 markdown 包 JSON, 抽出來
+        if "```json" in content:
+            content = content.split("```json", 1)[1].split("```", 1)[0]
+        elif "```" in content:
+            content = content.split("```", 1)[1].split("```", 1)[0]
+        data = json.loads(content.strip())
+    except Exception as e:
+        return JSONResponse({"error": f"JSON 格式錯: {e}"}, status_code=400)
+
+    AGENDA = data
+    SPEAKERS = []
+    for i, sp in enumerate(data.get("speakers", [])):
+        SPEAKERS.append(SpeakerSession(
+            idx=i,
+            name=sp.get("speaker", f"Speaker {i+1}"),
+            role=sp.get("role", ""),
+            language=sp.get("language", "auto"),
+        ))
+    return {"loaded": len(SPEAKERS), "meeting": data.get("meeting_no")}
 
 
 @app.post("/api/commit-speakers")

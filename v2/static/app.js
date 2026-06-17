@@ -182,17 +182,79 @@ function setStatus(msg) {
 }
 
 // ===== Copy buttons =====
-document.getElementById("copy-opening").addEventListener("click", () => {
-  const t = document.getElementById("opening-text").textContent;
-  navigator.clipboard.writeText(t).then(() => setStatus("📋 開場詞已複製"));
-});
 document.getElementById("copy-report").addEventListener("click", () => {
   const t = document.getElementById("report-text").textContent;
   navigator.clipboard.writeText(t).then(() => setStatus("📋 報告已複製"));
 });
 document.getElementById("generate-report").addEventListener("click", generateReport);
 
-// ===== OCR 上傳 =====
+// ===== 共用: 提交 JSON 文字到 server =====
+async function submitAgendaJsonText(text) {
+  if (!text || !text.trim()) {
+    alert("沒內容可提交");
+    return;
+  }
+  setStatus("⏳ 解析中...");
+  const blob = new Blob([text], {type: "application/json"});
+  const fd = new FormData();
+  fd.append("file", blob, "pasted.json");
+  try {
+    const res = await fetch("/api/upload-agenda-json", {method: "POST", body: fd});
+    const data = await res.json();
+    if (data.error) {
+      setStatus("❌ " + data.error);
+      alert("JSON 格式錯: " + data.error + "\n\n檢查是不是純 JSON, 不要包額外文字");
+      return;
+    }
+    setStatus(`✅ 載入 ${data.loaded} 位講者 (Meeting #${data.meeting || "?"})`);
+    await loadAgenda();
+    document.querySelectorAll(".tab").forEach(x => x.classList.remove("active"));
+    document.querySelectorAll(".tab-content").forEach(x => x.classList.remove("active"));
+    document.querySelector('[data-tab="counter"]').classList.add("active");
+    document.getElementById("tab-counter").classList.add("active");
+  } catch (err) {
+    setStatus("❌ " + err.message);
+  }
+}
+
+// 方式 A: 貼上提交
+document.getElementById("btn-paste-submit").addEventListener("click", () => {
+  const text = document.getElementById("agenda-paste").value;
+  submitAgendaJsonText(text);
+});
+
+// 方式 B: 檔案上傳
+document.getElementById("btn-pick-json").addEventListener("click", () => {
+  document.getElementById("agenda-json").click();
+});
+
+document.getElementById("agenda-json").addEventListener("change", async (e) => {
+  const file = e.target.files[0];
+  if (!file) return;
+  setStatus("📂 上傳議程 JSON...");
+  const fd = new FormData();
+  fd.append("file", file);
+  try {
+    const res = await fetch("/api/upload-agenda-json", {method: "POST", body: fd});
+    const data = await res.json();
+    if (data.error) {
+      setStatus("❌ " + data.error);
+      alert("解析失敗: " + data.error);
+      return;
+    }
+    setStatus(`✅ 載入 ${data.loaded} 位講者 (Meeting #${data.meeting || "?"})`);
+    await loadAgenda();
+    // 自動切到 Counter tab
+    document.querySelectorAll(".tab").forEach(x => x.classList.remove("active"));
+    document.querySelectorAll(".tab-content").forEach(x => x.classList.remove("active"));
+    document.querySelector('[data-tab="counter"]').classList.add("active");
+    document.getElementById("tab-counter").classList.add("active");
+  } catch (err) {
+    setStatus("❌ " + err.message);
+  }
+});
+
+// ===== OCR 拍照上傳 (備用) =====
 document.getElementById("btn-pick-photo").addEventListener("click", () => {
   document.getElementById("agenda-photo").click();
 });
