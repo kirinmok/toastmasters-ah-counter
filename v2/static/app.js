@@ -58,13 +58,14 @@ function speakerRow(sp) {
   div.innerHTML = `
     <div class="speaker-row">
       <div class="speaker-name">
-        <span class="name">${sp.name}</span>
-        <span class="role">${sp.role}</span>
+        <span class="name" contenteditable="true" data-idx="${sp.idx}" data-field="name">${sp.name}</span>
+        <span class="role" contenteditable="true" data-idx="${sp.idx}" data-field="role">${sp.role}</span>
       </div>
       <div class="timer-display" id="tm-${sp.idx}">00:00</div>
       <button class="btn-rec" id="btn-${sp.idx}" data-idx="${sp.idx}">
         ${recBtnLabel(sp)}
       </button>
+      <button class="btn-del" data-del="${sp.idx}" title="刪除">✕</button>
     </div>
     <div class="filler-grid" id="fg-${sp.idx}"></div>
     <div class="transcript-mini" id="tr-${sp.idx}" style="display:none"></div>
@@ -74,6 +75,34 @@ function speakerRow(sp) {
   if (sp.is_recording) btn.classList.add("recording");
   if (sp.ended) btn.classList.add("done");
   btn.addEventListener("click", () => toggleRecording(sp.idx));
+
+  // ===== Inline 編輯姓名 / 角色 =====
+  div.querySelectorAll('[contenteditable="true"]').forEach(el => {
+    el.addEventListener("blur", async () => {
+      const idx = el.dataset.idx;
+      const field = el.dataset.field;
+      const val = el.textContent.trim();
+      await fetch(`/api/speaker/${idx}/rename`, {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({[field]: val}),
+      });
+      setStatus(`✏️ 更新 ${field}: ${val}`);
+    });
+    el.addEventListener("keydown", e => {
+      if (e.key === "Enter") { e.preventDefault(); el.blur(); }
+    });
+  });
+
+  // ===== 刪除講者 =====
+  const delBtn = div.querySelector(".btn-del");
+  if (delBtn) {
+    delBtn.addEventListener("click", async () => {
+      if (!confirm(`刪除 ${sp.name}?`)) return;
+      await fetch(`/api/speaker/${sp.idx}`, {method: "DELETE"});
+      loadAgenda();
+    });
+  }
   return div;
 }
 

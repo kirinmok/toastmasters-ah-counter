@@ -151,8 +151,11 @@ def load_meta_only(path: Path):
     global SPEAKERS, AGENDA
     AGENDA = json.loads(path.read_text(encoding="utf-8"))
     SPEAKERS = []
-    # 若 agenda 已含實際講者(KIRIN 手寫或從 OCR 預先解析過),直接吃進去
+    # 若 agenda 已含實際講者,直接吃進去
+    # 過濾 counted=false 的 (主持/串場/Master/GE 等不算 filler 的角色),跟手動版一致
     for i, sp in enumerate(AGENDA.get("speakers", [])):
+        if not sp.get("counted", True):
+            continue
         SPEAKERS.append(SpeakerSession(
             idx=i,
             name=sp.get("speaker", f"Speaker {i+1}"),
@@ -205,6 +208,44 @@ def api_stop(idx: int):
 @app.get("/api/speaker/{idx}")
 def api_get(idx: int):
     return _get_speaker(idx).to_dict()
+
+
+class RenamePayload(BaseModel):
+    name: str | None = None
+    role: str | None = None
+
+
+@app.post("/api/speaker/{idx}/rename")
+def api_rename(idx: int, payload: RenamePayload):
+    """現場改講者姓名 / 角色 (Table Topics 即興點到誰用)."""
+    sp = _get_speaker(idx)
+    if payload.name is not None and payload.name.strip():
+        sp.name = payload.name.strip()
+    if payload.role is not None:
+        sp.role = payload.role.strip()
+    return sp.to_dict()
+
+
+@app.post("/api/add-speaker")
+def api_add(payload: dict):
+    """現場新增講者 (Table Topics 多位回答者)."""
+    idx = max([s.idx for s in SPEAKERS], default=-1) + 1
+    sp = SpeakerSession(
+        idx=idx,
+        name=payload.get("name", f"Speaker {idx+1}"),
+        role=payload.get("role", "Table Topics"),
+        language="auto",
+    )
+    SPEAKERS.append(sp)
+    return sp.to_dict()
+
+
+@app.delete("/api/speaker/{idx}")
+def api_delete(idx: int):
+    """誤加講者後刪除."""
+    global SPEAKERS
+    SPEAKERS = [s for s in SPEAKERS if s.idx != idx]
+    return {"deleted": idx, "remaining": len(SPEAKERS)}
 
 
 @app.get("/api/report")
