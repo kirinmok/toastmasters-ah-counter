@@ -359,6 +359,22 @@ document.getElementById("btn-commit").addEventListener("click", async () => {
   document.getElementById("tab-counter").classList.add("active");
 });
 
+// ===== 新增講者 (Table Topics 即興點到誰) =====
+document.getElementById("btn-add-speaker").addEventListener("click", async () => {
+  const name = document.getElementById("add-name").value.trim();
+  const role = document.getElementById("add-role").value.trim() || "Table Topics";
+  if (!name) { alert("姓名必填"); return; }
+  await fetch("/api/add-speaker", {
+    method: "POST",
+    headers: {"Content-Type": "application/json"},
+    body: JSON.stringify({name, role}),
+  });
+  document.getElementById("add-name").value = "";
+  document.getElementById("add-role").value = "";
+  loadAgenda();
+  setStatus(`✅ 新增 ${name}`);
+});
+
 // ===== Init =====
 loadAgenda();
 setStatus("Ready");

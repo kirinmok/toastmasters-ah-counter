@@ -220,6 +220,32 @@ button {
 }
 
 /* ===== Status bar ===== */
+/* ===== 新增講者輸入列 ===== */
+.add-speaker-row {
+  display: flex; gap: 8px; margin-bottom: 12px; flex-wrap: wrap;
+}
+.add-speaker-row input {
+  flex: 1; min-width: 140px;
+  background: #0e0e0e; border: 1px solid #2a2a2a; color: #fff;
+  padding: 10px 14px; border-radius: 6px; font-size: 14px;
+}
+.add-speaker-row button { white-space: nowrap; }
+
+/* 姓名 contenteditable 提示 */
+.speaker-name .name[contenteditable], .speaker-name .role[contenteditable] {
+  outline: none; padding: 2px 4px; border-radius: 3px; cursor: text;
+}
+.speaker-name .name[contenteditable]:hover { background: rgba(255,255,255,0.05); }
+.speaker-name .name[contenteditable]:focus { background: rgba(67,97,238,0.15); }
+.speaker-name .role[contenteditable]:hover { background: rgba(255,255,255,0.05); }
+.speaker-name .role[contenteditable]:focus { background: rgba(67,97,238,0.15); }
+
+.btn-del {
+  background: transparent; border: none; color: #555;
+  font-size: 18px; padding: 4px 8px; cursor: pointer;
+}
+.btn-del:hover { color: #ef4444; }
+
 /* ===== OCR result rows ===== */
 .ocr-row {
   display: flex;

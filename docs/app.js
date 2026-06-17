@@ -243,6 +243,24 @@ function escapeHtml(s) {
   return String(s || "").replace(/[<>&"']/g, c => ({"<":"&lt;",">":"&gt;","&":"&amp;",'"':"&quot;","'":"&#39;"}[c]));
 }
 
+// ===== 現場新增講者 (Table Topics 用) =====
+document.getElementById("btn-add-speaker").addEventListener("click", () => {
+  const name = document.getElementById("add-name").value.trim();
+  const role = document.getElementById("add-role").value.trim() || "Table Topics";
+  if (!name) { alert("姓名必填"); return; }
+  const idx = speakers.length;
+  speakers.push({
+    idx, name, role,
+    fillers: Object.fromEntries(FILLERS.map(f => [f.key, 0])),
+    done: false,
+  });
+  save();
+  renderCards();
+  document.getElementById("add-name").value = "";
+  document.getElementById("add-role").value = "";
+  setStatus(`✅ 新增 ${name}`);
+});
+
 // ===== Init =====
 load();
 renderCards();
