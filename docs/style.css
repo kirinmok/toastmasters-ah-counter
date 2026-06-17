@@ -1,0 +1,107 @@
+* { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+body {
+  font-family: -apple-system, "PingFang TC", "Segoe UI", system-ui, sans-serif;
+  background: #111; color: #ddd; min-height: 100vh; padding-bottom: 80px;
+}
+header {
+  background: #1a1a1a; padding: 12px 16px;
+  display: flex; align-items: center; justify-content: space-between;
+  border-bottom: 1px solid #333; position: sticky; top: 0; z-index: 10;
+}
+header h1 { font-size: 16px; font-weight: 700; color: #fff; }
+header .sub { font-size: 11px; color: #777; }
+.container { max-width: 900px; margin: 0 auto; padding: 12px; }
+
+.tabs { display: flex; gap: 4px; margin-bottom: 12px; }
+.tab {
+  flex: 1; padding: 14px 8px; text-align: center; border-radius: 8px;
+  font-size: 14px; font-weight: 600; cursor: pointer;
+  background: #222; color: #888; border: 1px solid #333; transition: all 0.2s;
+}
+.tab.active { background: #444; color: #fff; border-color: #555; }
+.tab-content { display: none; }
+.tab-content.active { display: block; }
+
+.section-card {
+  background: #1a1a1a; border: 1px solid #2a2a2a; border-radius: 12px;
+  padding: 16px 18px; margin-bottom: 14px;
+}
+.section-card h2 { color: #fff; font-size: 16px; margin-bottom: 6px; }
+.hint { color: #777; font-size: 12px; margin-bottom: 12px; line-height: 1.6; }
+.hint code { background: #0e0e0e; padding: 1px 6px; border-radius: 4px; color: #06d6a0; }
+
+.script-box {
+  background: #0e0e0e; border: 1px solid #2a2a2a; border-radius: 8px;
+  padding: 14px 16px; color: #ccc; font-size: 14px; line-height: 1.7;
+  white-space: pre-wrap; font-family: inherit; margin-bottom: 12px;
+  max-height: 300px; overflow-y: auto;
+}
+
+textarea {
+  width: 100%; background: #0e0e0e; border: 1px solid #2a2a2a; color: #ddd;
+  padding: 12px 14px; border-radius: 8px; font-family: -apple-system, monospace;
+  font-size: 14px; resize: vertical; line-height: 1.6; margin-bottom: 10px;
+}
+textarea:focus { outline: none; border-color: #4361ee; }
+
+button {
+  font-family: inherit; font-size: 14px; font-weight: 600; border: none;
+  border-radius: 8px; cursor: pointer; padding: 10px 18px;
+  transition: all 0.15s; margin-right: 8px;
+}
+.btn-primary { background: #fff; color: #111; }
+.btn-primary:hover { background: #ddd; }
+.btn-secondary { background: #2a2a2a; color: #fff; border: 1px solid #444; }
+.btn-secondary:hover { background: #333; }
+.btn-row { display: flex; gap: 8px; flex-wrap: wrap; }
+
+/* ===== Speaker Card ===== */
+.speaker-card {
+  background: #1a1a1a; border: 1px solid #2a2a2a; border-radius: 12px;
+  padding: 14px 16px; margin-bottom: 12px;
+}
+.speaker-card.active { border-color: #ef4444; box-shadow: 0 0 20px rgba(239,68,68,0.2); }
+.speaker-card.done { border-color: #22c55e; }
+
+.speaker-header {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 12px; gap: 8px; flex-wrap: wrap;
+}
+.speaker-name { flex: 1; min-width: 150px; }
+.speaker-name .name { color: #fff; font-weight: 700; font-size: 15px; }
+.speaker-name .role { color: #777; font-size: 12px; margin-top: 2px; display: block; }
+.speaker-total { color: #ffd166; font-size: 18px; font-weight: 700; font-family: "SF Mono", monospace; }
+
+/* Filler buttons grid */
+.filler-grid {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(72px, 1fr)); gap: 6px;
+}
+.filler-btn {
+  background: #0e0e0e; border: 1px solid #2a2a2a; border-radius: 8px;
+  padding: 8px 4px; text-align: center; cursor: pointer; user-select: none;
+  position: relative;
+}
+.filler-btn:active { background: #1a1a1a; transform: scale(0.95); }
+.filler-btn .word { color: #888; font-size: 11px; display: block; }
+.filler-btn .count {
+  color: #fff; font-size: 22px; font-weight: 700; font-family: "SF Mono", monospace;
+  margin-top: 2px;
+}
+.filler-btn.zero .count { color: #444; }
+.filler-btn.warn { background: #3a2810; border-color: #5a3818; }
+.filler-btn.warn .count { color: #eab308; }
+.filler-btn.hot { background: #3a1010; border-color: #5a1515; }
+.filler-btn.hot .count { color: #ef4444; }
+
+.filler-actions { display: flex; gap: 6px; margin-top: 8px; flex-wrap: wrap; }
+.filler-actions button {
+  flex: 1; min-width: 60px; padding: 6px; font-size: 12px;
+  background: #2a2a2a; color: #ccc; border: 1px solid #333;
+}
+.filler-actions button.danger { background: #2a1010; border-color: #4a1515; color: #ef4444; }
+
+#status-bar {
+  position: fixed; bottom: 0; left: 0; right: 0;
+  background: #1a1a1a; border-top: 1px solid #333;
+  padding: 10px 16px; font-size: 12px; color: #888; text-align: center;
+}

@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Ah Counter — Toastmasters</title>
+<meta name="theme-color" content="#1a1a1a">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header>
+  <h1>🎤 Ah Counter</h1>
+  <div class="sub">Toastmasters — 手動計數版</div>
+</header>
+
+<div class="container">
+
+  <div class="tabs">
+    <div class="tab active" data-tab="setup">✏️ 設定</div>
+    <div class="tab" data-tab="count">🎙 計數</div>
+    <div class="tab" data-tab="report">📣 報告</div>
+  </div>
+
+  <!-- ===== Tab 1: 設定講者 ===== -->
+  <div class="tab-content active" id="tab-setup">
+    <div class="section-card">
+      <h2>Opening Script (Toastmaster 點到你時念)</h2>
+      <pre id="opening-text" class="script-box">Thank you, Toastmaster. Good evening fellow Toastmasters and welcomed guests. I'm Kirin, your Ah Counter for tonight.
+
+My role is to listen for filler words — uh, um, ah, like, so, you know — and unnecessary repetitions that sneak in when our brain races ahead of our mouth.
+
+But fillers are not mistakes — they are simply our brain catching up with our tongue. I'm not here as a judge. I'm here as a mirror, helping each of you notice the habits you may not hear yourself.
+
+I'll share my observations during reports. Wishing everyone a night of powerful pauses and minimal fillers.
+
+Thank you. Back to you, Toastmaster.</pre>
+      <button class="btn-secondary" id="copy-opening">📋 複製開場詞</button>
+    </div>
+
+    <div class="section-card">
+      <h2>✏️ 今晚講者（一行一位,逗號分隔姓名與角色）</h2>
+      <div class="hint">例: <code>Luca, Manual Speech 1</code> | 改完按「載入」會跳到計數 tab</div>
+      <textarea id="speakers-input" rows="8" placeholder="Luca, Manual Speech 1
+Bain Chou, Manual Speech 2
+Terence Ai, Evaluator (Ice breaker)
+Ross Tsai, Evaluator (PM3-3)
+Table Topics, Table Topics responders"></textarea>
+      <button class="btn-primary" id="btn-load">✅ 載入講者</button>
+      <button class="btn-secondary" id="btn-clear-all">🗑️ 清空全部</button>
+    </div>
+  </div>
+
+  <!-- ===== Tab 2: 計數 ===== -->
+  <div class="tab-content" id="tab-count">
+    <div id="speaker-cards"></div>
+  </div>
+
+  <!-- ===== Tab 3: 報告 ===== -->
+  <div class="tab-content" id="tab-report">
+    <div class="section-card">
+      <h2>📣 Ah Counter's Report</h2>
+      <div class="hint">點下方按鈕自動生成英文報告話術</div>
+      <pre id="report-text" class="script-box">(尚未生成)</pre>
+      <div class="btn-row">
+        <button class="btn-primary" id="btn-generate">⚡ 生成報告</button>
+        <button class="btn-secondary" id="btn-copy-report">📋 複製</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="status-bar">Ready</div>
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>
