@@ -105,6 +105,21 @@ button {
 }
 .filler-actions button.danger { background: #2a1010; border-color: #4a1515; color: #ef4444; }
 
+/* ===== 可編輯姓名 ===== */
+.speaker-name .name[contenteditable], .speaker-name .role[contenteditable] {
+  outline: none; padding: 4px 8px; border-radius: 4px; cursor: text;
+  border: 1px dashed #333;
+}
+.speaker-name .name[contenteditable]:focus,
+.speaker-name .role[contenteditable]:focus {
+  background: rgba(67,97,238,0.18); border-color: #4361ee;
+}
+.btn-del-inline {
+  background: transparent; border: none; color: #555;
+  font-size: 18px; padding: 4px 10px; cursor: pointer; margin-left: 6px;
+}
+.btn-del-inline:hover { color: #ef4444; }
+
 /* ===== 新增講者輸入列 ===== */
 .add-speaker-row {
   display: flex; gap: 8px; margin-top: 8px; flex-wrap: wrap;

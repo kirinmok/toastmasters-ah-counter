@@ -108,10 +108,11 @@ function renderCard(sp) {
     <div class="speaker-card ${cls}" id="card-${sp.idx}">
       <div class="speaker-header">
         <div class="speaker-name">
-          <span class="name">${escapeHtml(sp.name)}</span>
-          <span class="role">${escapeHtml(sp.role)}</span>
+          <span class="name" contenteditable="true" data-sp="${sp.idx}" data-field="name">${escapeHtml(sp.name)}</span>
+          <span class="role" contenteditable="true" data-sp="${sp.idx}" data-field="role">${escapeHtml(sp.role)}</span>
         </div>
         <div class="speaker-total">${total}</div>
+        <button data-action="del" data-sp="${sp.idx}" class="btn-del-inline" title="刪除">✕</button>
       </div>
       <div class="filler-grid">${fillerCells}</div>
       <div class="filler-actions">
@@ -163,9 +164,27 @@ function bindCard(sp) {
         Object.keys(sp.fillers).forEach(k => sp.fillers[k] = 0);
       } else if (action === "done") {
         sp.done = !sp.done;
+      } else if (action === "del") {
+        if (!confirm(`刪除 ${sp.name}?`)) return;
+        const i = speakers.findIndex(x => x.idx === sp.idx);
+        if (i !== -1) speakers.splice(i, 1);
       }
       save();
       renderCards();
+    });
+  });
+  // Inline 編輯姓名 / 角色
+  card.querySelectorAll('[contenteditable="true"]').forEach(el => {
+    el.addEventListener("blur", () => {
+      const field = el.dataset.field;
+      const val = el.textContent.trim();
+      if (field === "name") sp.name = val || "Unnamed";
+      else if (field === "role") sp.role = val;
+      save();
+      setStatus(`✏️ ${sp.name} ${field} 已更新`);
+    });
+    el.addEventListener("keydown", e => {
+      if (e.key === "Enter") { e.preventDefault(); el.blur(); }
     });
   });
 }
